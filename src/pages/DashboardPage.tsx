@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useAuth } from "@/hooks/useAuth"
 import { MdLogout } from "react-icons/md";
 
@@ -19,6 +19,7 @@ export default function DashboardPage() {
   const handleLogout = async() => {
     try{
       await logout()
+      setPhotoURL('')
     } 
     catch(error){
       console.log(error)
