@@ -12,14 +12,7 @@ dist
 dist-ssr
 *.local
 .env
-vercel.json
-package-lock.json
-tsconfig.node.json
-vite.config.ts
-postcss.config.js
-eslint.config.js
-tsconfig.app.json
-tsconfig.json
+
 
 # Editor directories and files
 .vscode/*
