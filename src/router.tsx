@@ -6,6 +6,7 @@ import ProtectedRoute from "@/pages/auth/ProtectedRoute";
 import HomePage from "@/pages/HomePage";
 import AuthLayout from "@/layouts/AuthLayout";
 import ResetPassword from "@/pages/auth/ResetPassword";
+import CreateEmployeePage from "./pages/CreateEmployeePage";
 
 export default function AppRouter() {
     
@@ -17,6 +18,13 @@ export default function AppRouter() {
                         <DashboardPage/>
                     </ProtectedRoute>
                 }/>
+
+                <Route path="/home/crear" element={
+                    <ProtectedRoute>
+                        <CreateEmployeePage/>
+                    </ProtectedRoute>
+                }/>
+
                 <Route path="/" element={ <HomePage/> } />
 
                 <Route element={<AuthLayout/>}>
