@@ -1,13 +1,24 @@
 import { useAuth } from "@/hooks/useAuth"
 import { Employee, NewEmployeeData } from "@/interfaces/employee"
-import axios from "axios"
+import { 
+    createNewEmployeeService, 
+    deleteAnEmployeeService, 
+    editAnEmployeeService, 
+    getEmployeeByIdService, 
+    getMyEmployeesService 
+} from "@/services/employeeService"
 import { ReactNode, createContext, useState } from "react"
 
 type EmployeeContextProps = {
     employees: Employee[],
+    employeeDetail: Employee,
     getMyEmployees: () => Promise<void>,
     deleteAnEmployee: (id: Employee["id"]) => Promise<void>,
-    createNewEmployee: (dataForm: NewEmployeeData) => Promise<Employee>
+    createNewEmployee: (dataForm: NewEmployeeData) => Promise<Employee>,
+    getEmployeeById: (id: Employee["id"]) => Promise<void>,
+    resetValuesEmployeeDetails: () => void,
+    editAnEmployee: (dataForm: NewEmployeeData, id: Employee["id"]) => Promise<Employee>,
+    resetValuesEmployees: () => void
 }
 
 type EmployeeProviderProps = {
@@ -20,37 +31,76 @@ export const EmployeeProvider = ({children}: EmployeeProviderProps) => {
 
     const {user} = useAuth()
     const [employees, setEmployees] = useState<Employee[]>([])
+    const [employeeDetail, setEmployeeDetail] = useState<Employee>({
+        id: 0,
+        name: '',
+        surname: '',
+        email: '',
+        phone: '',
+        job: '',
+        nif: '',
+        seguridadsocial: '',
+        salary: '',
+        user_id: ''
+    })
     
     const getMyEmployees = async() => {
-        const {data} = await axios.get(`https://estebanfandos-mysql-node.vercel.app/api/employees/${user?.uid}/myemployees`)
-        const listEmployees : Employee[] = data['data']
-        setEmployees(listEmployees)
+        const data : Employee[] = await getMyEmployeesService(user?.uid)
+        setEmployees(data)
+    }
+
+    const getEmployeeById = async(id: Employee['id']) => {
+        const data : Employee = await getEmployeeByIdService(id)
+        setEmployeeDetail(data)
     }
 
     const createNewEmployee = async(dataForm: NewEmployeeData) => {
-        const {data} = await axios.post('https://estebanfandos-mysql-node.vercel.app/api/employees', {
-            name: dataForm.name,
-            surname: dataForm.surname,
-            email: dataForm.email,
-            phone: dataForm.phone,
-            job: dataForm.job,
-            nif: dataForm.nif,
-            seguridadsocial: dataForm.seguridadsocial,
-            salary: dataForm.salary,
-            user_id: user?.uid
-        })
-        if(data.status) return data
-
+        const data : Employee = await createNewEmployeeService(dataForm, user?.uid)
+        return data
     }
 
     const deleteAnEmployee = async(id: Employee['id']) => {
-        await axios.delete(`https://estebanfandos-mysql-node.vercel.app/api/employees/${id}`)
+        await deleteAnEmployeeService(id)
         const newEmployees = employees.filter(employees => employees.id !== id)
         setEmployees(newEmployees)
     }
 
+    const editAnEmployee = async(dataForm: NewEmployeeData, id: Employee['id']) => {
+        const data : Employee = await editAnEmployeeService(dataForm, id, user?.uid)
+        return data
+    }
+
+    const resetValuesEmployeeDetails = () => {
+        setEmployeeDetail({
+            id: 0,
+            name: '',
+            surname: '',
+            email: '',
+            phone: '',
+            job: '',
+            nif: '',
+            seguridadsocial: '',
+            salary: '',
+            user_id: ''
+        })
+    }
+
+    const resetValuesEmployees = () => {
+        setEmployees([])
+    }
+
     return (
-        <employeeContext.Provider value={{employees, getMyEmployees, deleteAnEmployee, createNewEmployee}}>
+        <employeeContext.Provider value={{
+            employees, 
+            getMyEmployees, 
+            deleteAnEmployee, 
+            createNewEmployee, 
+            getEmployeeById, 
+            employeeDetail, 
+            resetValuesEmployeeDetails,
+            editAnEmployee,
+            resetValuesEmployees
+        }}>
             {children}
         </employeeContext.Provider>
     )

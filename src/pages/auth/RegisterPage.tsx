@@ -8,8 +8,7 @@ export default function RegisterPage() {
 
   const {
     registerUser,
-    user: userAuthenticated, 
-    loading
+    user: userAuthenticated
   } = useAuth()
 
   const [error, setError] = useState<string | undefined>('')
@@ -33,22 +32,20 @@ export default function RegisterPage() {
       setError('')
       
       try{
-        await registerUser(user.email, user.password)
-        navigate('/login')
+          await registerUser(user.email, user.password)
+          navigate('/login')
       }
       catch(error){
-
-        if(error instanceof Error){
-          const formatMessage = formatFirebaseMessages(error.message)
-          setError(formatMessage)
-        }
-        else{
-          setError('Error desconocido')
-        }
+          if(error instanceof Error){
+              const formatMessage = formatFirebaseMessages(error.message)
+              setError(formatMessage)
+          }
+          else{
+              setError('Error desconocido')
+          }
       }
   }
 
-  if(loading) return (<h1>Cargando...</h1>)
   if(userAuthenticated) return <Navigate to={'/home'}/>
 
   return (
@@ -93,8 +90,7 @@ export default function RegisterPage() {
                   className="border border-gray-600 text-gray-900 py-2 text-md text-center hover:bg-gray-100 transition"
                   to={'/login'}>
                     Ya tengo una cuenta
-                  </Link>
-                    
+                  </Link> 
               </div>
         </form>
     </>

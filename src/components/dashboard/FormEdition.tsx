@@ -1,28 +1,45 @@
-import { NewEmployeeData } from "@/interfaces/employee";
+import { Employee, NewEmployeeData } from "@/interfaces/employee";
 import { useForm } from "react-hook-form"
 import ErrorInput from "./ErrorInput";
 import { useEmployee } from "@/hooks/useEmployee";
 import { Link, useNavigate } from "react-router-dom";
 import { MdKeyboardBackspace } from "react-icons/md";
+import { useEffect} from "react";
 
-export default function FormCreation() {
+type FormEditionProps = {
+    employee: Employee
+}
+
+export default function FormEdition({employee} : FormEditionProps) {
 
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<NewEmployeeData>();
 
   const navigate = useNavigate()
 
-  const {createNewEmployee} = useEmployee()
+  const {editAnEmployee} = useEmployee()
 
   const dataForm = async(data : NewEmployeeData) => {
-      const result = await createNewEmployee(data)
-      if(result) return navigate('/home')
-      reset()
+     const result = await editAnEmployee(data, employee.id)
+     if(result) return navigate(`/home/employee/${employee.id}`)
+     reset()
   }
+
+  useEffect(() => {
+    setValue("name", employee.name)
+    setValue("surname", employee.surname)
+    setValue("email", employee.email)
+    setValue("phone", employee.phone)
+    setValue("job", employee.job)
+    setValue("nif", employee.nif)
+    setValue("seguridadsocial", employee.seguridadsocial)
+    setValue("salary", employee.salary)
+  }, [employee])
 
   return (
         <form 
@@ -33,10 +50,10 @@ export default function FormCreation() {
                 <input 
                 type="text" 
                 id="name"
-                placeholder="Nombre:" 
+                placeholder="Nombre:"
                 className="bg-gray-100 p-2 placeholder:text-gray-600 rounded-md" 
                 required
-                {...register('name', {pattern: /^[A-Za-z\s]+$/i, maxLength: 20 })}
+                {...register('name', {pattern: /^[A-Za-z\s]+$/i, maxLength: 20})}
                 />
 
                 {errors.name && <ErrorInput> Nombre no valido </ErrorInput>}
@@ -131,14 +148,14 @@ export default function FormCreation() {
             </div>
 
             <button className="bg-gray-900 mt-4 py-2 text-lg text-gray-100 rounded-md hover:opacity-95 transition">
-                Crear empleado
+                Editar empleado
             </button>
 
             <Link 
             to={'/home'} 
             className="absolute -top-6 left-0 md:my-6 md:mx-12 ml-4 px-3 py-1 flex items-center gap-1 text-gray-100 text-sm bg-gray-900 rounded-md hover:opacity-95 hover:scale-105 transition">
-            Back
-            <MdKeyboardBackspace/>
+              Back
+              <MdKeyboardBackspace/>
             </Link>
             
         </form>

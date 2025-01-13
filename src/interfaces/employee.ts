@@ -8,7 +8,7 @@ export interface Employee {
     job: string,
     nif: string,
     seguridadsocial: string,
-    salary: number,
+    salary: string,
     user_id: string
 }
 

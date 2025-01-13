@@ -26,7 +26,6 @@ export default function BentoTech() {
                         100% <br /> gratuito
                     </span>
                </button>
-
          </div> 
     </section>  
   )

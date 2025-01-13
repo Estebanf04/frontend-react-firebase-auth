@@ -4,8 +4,6 @@ import { useNavigate, Navigate, Link } from "react-router-dom"
 import { formatFirebaseMessages } from "@/utils/firebase-error-message"
 import ErrorMessage from "@/components/ErrorMessage"
 
-
-
 export default function LoginPage() {
 
   const {
@@ -16,6 +14,7 @@ export default function LoginPage() {
   } = useAuth()
 
   const [error, setError] = useState<string | undefined>('')
+
   const [user, setUser] = useState({
     email: '',
     password: ''
@@ -35,33 +34,33 @@ export default function LoginPage() {
       setError('')
 
         try{
-          await loginUser(user.email, user.password)
-          navigate('/home')
+            await loginUser(user.email, user.password)
+            navigate('/home')
         }
         catch(error){
-          if(error instanceof Error){
-            const formatMessage = formatFirebaseMessages(error.message)
-            setError(formatMessage)
-          }
-          else{
-            setError('Error desconocido')
-          }
+            if(error instanceof Error){
+              const formatMessage = formatFirebaseMessages(error.message)
+              setError(formatMessage)
+            }
+            else{
+              setError('Error desconocido')
+            }
         }
   }
 
   const googleSignIn = async() => {
       try{
-        await loginWithGoogle()
-        navigate('/home')
+          await loginWithGoogle()
+          navigate('/home')
       }
       catch(error){
-        if(error instanceof Error){
-          const formatMessage = formatFirebaseMessages(error.message)
-          setError(formatMessage)
-        }
-        else{
-          setError('Error desconocido')
-        }
+          if(error instanceof Error){
+              const formatMessage = formatFirebaseMessages(error.message)
+              setError(formatMessage)
+          }
+          else{
+              setError('Error desconocido')
+          }
       }
   }
 
@@ -125,7 +124,6 @@ export default function LoginPage() {
                           Crear cuenta
                         </Link>
                     </div>
-
                 </div>
 
                   <Link 

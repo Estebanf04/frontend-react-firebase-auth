@@ -7,6 +7,8 @@ import HomePage from "@/pages/HomePage";
 import AuthLayout from "@/layouts/AuthLayout";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import CreateEmployeePage from "./pages/CreateEmployeePage";
+import EmployeeDetailsPage from "./pages/EmployeeDetailsPage";
+import EditEmployeePage from "./pages/EditEmployeePage";
 
 export default function AppRouter() {
     
@@ -22,6 +24,18 @@ export default function AppRouter() {
                 <Route path="/home/crear" element={
                     <ProtectedRoute>
                         <CreateEmployeePage/>
+                    </ProtectedRoute>
+                }/>
+
+                <Route path="/home/employee/:id" element={
+                    <ProtectedRoute>
+                        <EmployeeDetailsPage/>
+                    </ProtectedRoute>
+                }/>
+
+                <Route path="/home/employee/:id/edit" element={
+                    <ProtectedRoute>
+                        <EditEmployeePage/>
                     </ProtectedRoute>
                 }/>
 

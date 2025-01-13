@@ -8,11 +8,13 @@ import { formatFirebaseMessages } from "@/utils/firebase-error-message";
 export default function ResetPassword() {
 
     const [email, setEmail] = useState('')
+
     const [resetPasswordMessage, setResetPasswordMessage] = useState(false)
+
     const [error, setError] = useState<string | undefined>('')
+
     const {
       resetPassword, 
-      loading, 
       user: userAuthenticated
     } = useAuth()
 
@@ -27,21 +29,20 @@ export default function ResetPassword() {
         if(!email) return setError('Ingrese su email para restablecer la contraseña')
     
         try{
-          await resetPassword(email)
-          setResetPasswordMessage(true)
+            await resetPassword(email)
+            setResetPasswordMessage(true)
         }
         catch(error){
-          if(error instanceof Error){
-            const formatMessage = formatFirebaseMessages(error.message)
-            setError(formatMessage)
-          }
-          else{
-            setError('Error desconocido')
-          }
+            if(error instanceof Error){
+                const formatMessage = formatFirebaseMessages(error.message)
+                setError(formatMessage)
+            }
+            else{
+                setError('Error desconocido')
+            }
         }
       }
 
-      if(loading) return (<h1>Cargando...</h1>)
       if(userAuthenticated) return <Navigate to={'/home'}/>
 
     return (
@@ -79,8 +80,7 @@ export default function ResetPassword() {
                   className="border border-gray-600 text-gray-900 py-2 text-md text-center hover:bg-gray-100 transition"
                   to={'/login'}>
                   Regresar
-                  </Link>
-                          
+                  </Link>        
               </div>
           </form>
       </>

@@ -28,8 +28,6 @@ type AuthProviderProps = {
 
 export const authContext = createContext<AuthContextProps>(null!)
 
-// ----
-
 export const AuthProvider = ({children} : AuthProviderProps) => {
 
     const [user, setUser] = useState<User | null>(null)
@@ -63,7 +61,15 @@ export const AuthProvider = ({children} : AuthProviderProps) => {
 
 
     return (
-        <authContext.Provider value={{registerUser, loginUser, user, logout, loading, loginWithGoogle, resetPassword}}>
+        <authContext.Provider value={{
+            registerUser, 
+            loginUser, 
+            user, 
+            logout, 
+            loading, 
+            loginWithGoogle, 
+            resetPassword
+        }}>
             {children}
         </authContext.Provider>
     )
